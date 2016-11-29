@@ -1,0 +1,18 @@
+# tutorial for freeradius+pptp+daloradius web management system
+# by wy 2012.10
+
+before start:
+1. ubuntu 10.04 server;
+2. install mysql;
+3. apache2 has supported php5;
+
+
+then:
+4. execute vpn-set.sh;
+5. test VPN by: "radtest vpnwy 111111 127.0.0.1 0 RopVPN", if see the ACCEPT, then OK;
+6. db already has 11 vpn users: vpnwy, vpnzcx, etc, all password are "111111";
+7. db already has 1 group with 10G/month traffic control counter;
+8. browser http://ip:port/daloradius/ to access dalo,  "administraotor/swsoft123_rop2011_dalo_radius";
+9. all client IP has been set 192.168.8.x/24, you can change it in "/etc/ppp/pptpd-options";
+10.client dns server default is "8.8.8.8", change it in "/etc/ppp/pptpd-options";
+11.hope you to use VPN happyly;

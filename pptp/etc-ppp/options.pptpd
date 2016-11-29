@@ -1,0 +1,30 @@
+name pptpd
+
+asyncmap 0
+noauth
+crtscts
+lock
+hide-password
+modem
+debug
+#kdebug 1
+proxyarp
+lcp-echo-interval 30
+lcp-echo-failure 4
+noipx
+
+
+
+refuse-pap
+refuse-chap
+refuse-mschap
+require-mppe-128
+require-mschap-v2
+
+ms-dns 8.8.8.8
+ms-dns 8.8.4.4
+plugin radius.so
+plugin radattr.so
+radius-config-file /usr/local/etc/radiusclient/radiusclient.conf
+
+# ---<End of File>---

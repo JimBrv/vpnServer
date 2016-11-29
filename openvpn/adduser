@@ -1,0 +1,9 @@
+#!/bin/bash
+DB='openvpn'
+DBADMIN='openvpn'
+DBPASSWD='openvpn'
+
+mysql -u$DBADMIN -p$DBPASSWD -e "select count(*) from user where username='$1'" $DB
+
+#mysql -u$DBADMIN -p$DBPASSWD -e "INSERT INTO user(username, password) VALUES('$1', ENCRYPT('$2'));" $DB
+mysql -u$DBADMIN -p$DBPASSWD -e "INSERT INTO user(username, password) VALUES('$1', password('$2'));" $DB

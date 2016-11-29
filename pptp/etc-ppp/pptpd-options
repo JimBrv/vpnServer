@@ -1,0 +1,20 @@
+name pptpd
+
+proxyarp
+nodefaultroute
+
+lock
+nobsdcomp
+
+refuse-pap
+refuse-chap
+refuse-mschap
+require-mschap-v2
+require-mppe-128
+
+ms-dns 58.20.127.238
+ms-dns 8.8.8.8
+
+plugin radius.so
+plugin radattr.so
+radius-config-file /usr/local/etc/radiusclient/radiusclient.conf

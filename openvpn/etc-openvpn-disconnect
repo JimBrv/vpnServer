@@ -1,0 +1,23 @@
+#!/bin/bash
+HOST='198.100.100.253' 
+SERVERIP='82.211.30.236'
+DB='openvpn'
+DBADMIN='openvpn'
+DBPASSWD='openvpn'
+
+# update log 
+mysql -h$HOST -u$DBADMIN -p$DBPASSWD -e "UPDATE log SET end_time=now(),bytes_received=$bytes_received,bytes_sent=$bytes_sent,status=0 WHERE trusted_ip='$trusted_ip' AND trusted_port=$trusted_port AND remote_ip='$ifconfig_pool_remote_ip' AND username='$common_name' AND status=1" $DB
+ 
+# delete online
+mysql -h$HOST -u$DBADMIN -p$DBPASSWD -e "DELETE FROM online WHERE username='$common_name'" $DB
+
+
+# update quota field
+mysql -h$HOST -u$DBADMIN -p$DBPASSWD -e "UPDATE user SET quota_used=quota_used+$bytes_received+$bytes_sent, history_bytes=history_bytes+$bytes_received+$bytes_sent WHERE username='$common_name';" $DB
+
+# updaet user state if quota exceeds
+mysql -h$HOST -u$DBADMIN -p$DBPASSWD -e "UPDATE user SET active=0 WHERE  username='$common_name' AND quota_used >= quota_bytes;" $DB
+
+# update server online
+mysql -h$HOST -u$DBADMIN -p$DBPASSWD -e "UPDATE server SET cur_user=cur_user-1 WHERE ip='$SERVERIP'" $DB
+

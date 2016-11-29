@@ -1,0 +1,9 @@
+auth            requisite      pam_mysql.so \
+verbose=1 debug user=openvpn passwd=openvpn host=198.100.100.253 db=openvpn \
+table=user usercolumn=username passwdcolumn=password \
+where=active=1 sqllog=0 crypt=0
+ 
+account         required        pam_mysql.so \
+verbose=1 debug user=openvpn passwd=openvpn host=198.100.100.253 db=openvpn \
+table=user usercolumn=username passwdcolumn=password \
+where=active=1 sqllog=0 crypt=0

@@ -1,0 +1,15 @@
+#!/bin/bash
+HOST='198.100.100.253'
+SERVERIP='82.211.30.236'
+DB='openvpn'
+DBADMIN='openvpn'
+DBPASSWD='openvpn'
+
+# add log 
+mysql -h$HOST -u$DBADMIN -p$DBPASSWD -e "INSERT INTO log(username,start_time,trusted_ip,trusted_port,protocol,remote_ip,remote_netmask,status,server_ip) VALUES('$common_name',now(),'$trusted_ip','$trusted_port',CONCAT('openvpn-','$proto_1'),'$ifconfig_pool_remote_ip','$route_netmask_1',1,'$SERVERIP')" $DB
+
+# Add online
+mysql -h$HOST -u$DBADMIN -p$DBPASSWD -e "INSERT INTO online(username,start_time,trusted_ip,trusted_port,protocol,remote_ip,remote_netmask, server_ip) VALUES('$common_name',now(),'$trusted_ip',$trusted_port,CONCAT('openvpn-','$proto_1'),'$ifconfig_pool_remote_ip','$route_netmask_1', '$SERVERIP')" $DB
+
+# Plus user
+mysql -h$HOST -u$DBADMIN -p$DBPASSWD -e "UPDATE server set cur_user=cur_user+1 WHERE ip='$SERVERIP'" $DB

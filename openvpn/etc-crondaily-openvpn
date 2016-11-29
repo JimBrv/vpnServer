@@ -1,0 +1,13 @@
+#!/bin/bash
+ 
+DB='openvpn'
+DBADMIN='openvpn'
+DBPASSWD='openvpn'
+ 
+mysql -u$DBADMIN -p$DBPASSWD -e "UPDATE user SET active=1" $DB
+ 
+#mysql -u$DBADMIN -p$DBPASSWD -e "UPDATE user SET active=0 WHERE user.username IN (SELECT username FROM (SELECT log.username AS username, quota_bytes FROM user, log WHERE log.username=user.username AND log.status=0 AND TO_DAYS(NOW())-TO_DAYS(start_time)< =quota_cycle GROUP BY log.username HAVING SUM(bytes_received)+SUM(bytes_sent)>=quota_bytes) AS u);" $DB
+mysql -u$DBADMIN -p$DBPASSWD -e "UPDATE user SET active=0 WHERE quota_used >= quota_bytes OR enabled=0;" $DB
+
+ 
+#mysql -u$DBADMIN -p$DBPASSWD -e "UPDATE user SET active=0 WHERE enabled=0" $DB

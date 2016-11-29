@@ -1,0 +1,58 @@
+-- 创建数据库
+CREATE DATABASE openvpn;
+ 
+-- 切换数据库
+USE openvpn;
+ 
+-- 创建用户，用户名openvpn，密码openvpn（可自行设定）
+GRANT ALL ON openvpn.* TO 'openvpn'@'localhost' IDENTIFIED BY 'openvpn';
+ 
+-- 创建用户数据表
+CREATE TABLE IF NOT EXISTS `user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` char(32) COLLATE utf8_unicode_ci NOT NULL,
+  `password` char(128) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `active` int(10) NOT NULL DEFAULT '1',
+  `creation` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `name` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
+  `email` char(128) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `note` text COLLATE utf8_unicode_ci,
+  `quota_cycle` int(10) NOT NULL DEFAULT '30',
+  `quota_bytes` bigint(20) NOT NULL DEFAULT '10737418240',
+  `quota_used` bigint(20) NOT NULL DEFAULT '0',
+  `enabled` int(10) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`),
+  KEY `idx_user` (`username`),
+  KEY `idx_name` (`name`)
+) DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `online` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` char(32) COLLATE utf8_unicode_ci NOT NULL,
+  `start_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `trusted_ip` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `trusted_port` int(10) DEFAULT NULL,
+  `protocol` varchar(16) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `remote_ip` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `remote_netmask` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_user` (`username`)
+) DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+ 
+-- 创建日志数据表
+CREATE TABLE IF NOT EXISTS `log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
+  `start_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `end_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `trusted_ip` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `trusted_port` int(10) DEFAULT NULL,
+  `protocol` varchar(16) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `remote_ip` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `remote_netmask` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `bytes_received` bigint(20) DEFAULT '0',
+  `bytes_sent` bigint(20) DEFAULT '0',
+  `status` int(10) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`),
+  KEY `idx_username` (`username`)
+) DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
